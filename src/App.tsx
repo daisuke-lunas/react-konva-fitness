@@ -1,35 +1,48 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Box, Container, Grid } from "@mui/material";
+import "./App.css";
+import { indigo } from "@mui/material/colors";
+import ResultRow from "./components/resultRow";
+import bodyImgWoman from "./assets/人体図女性.png";
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <Container>
+      <Box>
+        <Grid
+          container
+          columnGap={2}
+          sx={{ backgroundColor: indigo[100], padding: 2 }}
+        >
+          <Grid item> 山田花 さん</Grid>
+          <Grid item> 性別: 女性</Grid>
+          <Grid item sx={{ marginLeft: "auto" }}>
+            {new Date().toLocaleDateString(undefined, { dateStyle: "full" })}
+          </Grid>
+        </Grid>
+      </Box>
+      <Box>
+        {
+          //ここに人体図と六角形
+        }
+        <img src={bodyImgWoman} height={"300px"}></img>
+      </Box>
+      <Box>
+        {
+          // ここに数値入力欄＆概説
+        }
+        <Grid
+          container
+          border={"black solid 1px"}
+          direction={"column"}
+          gap={1}
+          sx={{ padding: 1 }}
+        >
+          <ResultRow></ResultRow>
+          <ResultRow hasBodySide></ResultRow>
+        </Grid>
+      </Box>
+    </Container>
+  );
 }
 
-export default App
+export default App;
