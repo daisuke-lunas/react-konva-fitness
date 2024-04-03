@@ -1,7 +1,9 @@
-import { Box, Grid, TextField } from "@mui/material";
+import { Box, Grid, MenuItem, TextField } from "@mui/material";
 
-import { FMSName } from "../logic/coordinatesLogic";
+import { FMSName, FMSValue, Side } from "../logic/coordinatesLogic";
 import { lightGreen } from "@mui/material/colors";
+import { ResultStore } from "../stores/resultStore";
+import React, { useEffect, useState } from "react";
 
 const explanations: { [key: string]: string } = {
   DP: "全身のコントロール、柔軟性を評価しています",
@@ -19,6 +21,27 @@ interface _props {
 }
 
 const ResultRow = (props: _props) => {
+  const resultStore = ResultStore.useContainer();
+  const [avg, setAvg] = useState<number>(0);
+
+  useEffect(() => {
+    if (props.hasBodySide) {
+      const lVal = resultStore.value(props.name, "L");
+      const rVal = resultStore.value(props.name, "R");
+      if (lVal !== undefined && rVal !== undefined) {
+        setAvg((lVal + rVal) / 2);
+      }
+    }
+  }, [props.hasBodySide, props.name, resultStore]);
+
+  const onChange = (
+    evt: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>,
+    lr: Side
+  ) => {
+    const val = FMSValue(Number(evt.target.value));
+    resultStore.setValue(props.name, lr, val);
+  };
+
   return (
     <Grid
       item
@@ -37,15 +60,57 @@ const ResultRow = (props: _props) => {
             {props.hasBodySide ? (
               <Grid container alignItems={"center"} spacing={1}>
                 <Grid item width={120}>
-                  <TextField size="small" label="Left" />
-                  <TextField size="small" label="Right" sx={{ marginTop: 1 }} />
+                  <TextField
+                    select
+                    fullWidth
+                    size="small"
+                    label="Left"
+                    onChange={(evt) => onChange(evt, "L")}
+                    defaultValue={0}
+                  >
+                    <MenuItem value={0}> </MenuItem>
+                    <MenuItem value={1}>1</MenuItem>
+                    <MenuItem value={2}>2</MenuItem>
+                    <MenuItem value={3}>3</MenuItem>
+                  </TextField>
+                  <TextField
+                    select
+                    fullWidth
+                    size="small"
+                    label="Right"
+                    sx={{ marginTop: 1 }}
+                    onChange={(evt) => onChange(evt, "R")}
+                    defaultValue={0}
+                  >
+                    <MenuItem value={0}> </MenuItem>
+                    <MenuItem value={1}>1</MenuItem>
+                    <MenuItem value={2}>2</MenuItem>
+                    <MenuItem value={3}>3</MenuItem>
+                  </TextField>
                 </Grid>
                 <Grid item width={100}>
-                  <TextField disabled label="avg." />
+                  <TextField
+                    type={"number"}
+                    disabled
+                    label="avg."
+                    value={avg}
+                  />
                 </Grid>
               </Grid>
             ) : (
-              <TextField fullWidth size="small" />
+              <TextField
+                select
+                type={"number"}
+                fullWidth
+                size="small"
+                onChange={(evt) => onChange(evt, null)}
+                defaultValue={0}
+              >
+                <MenuItem value={0}></MenuItem>
+                <MenuItem value={1}>1</MenuItem>
+                <MenuItem value={2}>2</MenuItem>
+                <MenuItem value={3}>3</MenuItem>
+              </TextField>
             )}
           </Box>
         </Grid>

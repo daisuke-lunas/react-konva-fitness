@@ -5,6 +5,8 @@ import ResultRow from "./components/resultRow";
 import bodyImgWoman from "./assets/人体図女性.png";
 import { Circle, Layer, Stage } from "react-konva";
 import BackgroundHex from "./components/backGroundHex";
+import { ResultStore } from "./stores/resultStore";
+import ResultDiagram from "./components/resultDiagram";
 
 const WIDTH = 840;
 const IMG_HEIGHT = 300;
@@ -14,7 +16,7 @@ const stageWidth = WIDTH - 46;
 const centerX = stageWidth / 2;
 const centerY = stageHeight / 2;
 
-function App() {
+const _app = () => {
   const stageTop =
     parseFloat(getComputedStyle(document.documentElement).fontSize) * 2 + 68;
 
@@ -47,6 +49,7 @@ function App() {
             top: stageTop + "px",
             width: stageWidth + "px",
             height: stageHeight + "px",
+            ml: -1 + "px",
             // border: "solid grey 1px",
           }}
         >
@@ -70,6 +73,7 @@ function App() {
                 ratio={3}
                 withName
               ></BackgroundHex>
+              <ResultDiagram />
             </Layer>
           </Stage>
         </Box>
@@ -96,6 +100,14 @@ function App() {
       </Box>
     </Container>
   );
-}
+};
+
+const App = () => {
+  return (
+    <ResultStore.Provider>
+      <_app />
+    </ResultStore.Provider>
+  );
+};
 
 export default App;
