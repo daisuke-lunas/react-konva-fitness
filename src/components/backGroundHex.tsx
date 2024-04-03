@@ -1,8 +1,12 @@
 import { grey } from "@mui/material/colors";
 import { Group, Line, Text } from "react-konva";
-import { CenterPoint, calcCoordinates } from "../logic/coordinatesLogic";
+import {
+  CenterPoint,
+  FMSValue,
+  calcCoordinates,
+} from "../logic/coordinatesLogic";
 
-function calcPoints(centerPoint: CenterPoint, ratio: 0 | 1 | 2 | 3) {
+function calcPoints(centerPoint: CenterPoint, ratio: FMSValue) {
   const rslt: number[] = [];
   return rslt.concat(
     calcCoordinates("DP", null, centerPoint, ratio),
@@ -21,7 +25,7 @@ function calcPoints(centerPoint: CenterPoint, ratio: 0 | 1 | 2 | 3) {
 
 interface _props {
   centerPoint: CenterPoint;
-  ratio: 0 | 1 | 2 | 3;
+  ratio: FMSValue;
   withName?: boolean;
 }
 
@@ -38,28 +42,28 @@ const BackgroundHex = (props: _props) => {
       {props.withName && (
         <Group>
           <Text
-            x={points[0] - 8}
+            x={points[0] - 12}
             y={points[1] - 16}
             text={"DP"}
             fontSize={16}
             fill={grey[400]}
           />
           <Text
-            x={points[2] + 4}
+            x={points[2] + 6}
             y={points[3]}
             text={"SM-R"}
             fontSize={16}
             fill={grey[400]}
           />
           <Text
-            x={points[4] + 4}
+            x={points[4] + 8}
             y={points[5]}
             text={"IL-R"}
             fontSize={16}
             fill={grey[400]}
           />
           <Text
-            x={points[6] + 4}
+            x={points[6] + 8}
             y={points[7]}
             text={"ASLR-R"}
             fontSize={16}
@@ -73,7 +77,7 @@ const BackgroundHex = (props: _props) => {
             fill={grey[400]}
           />
           <Text
-            x={points[10] - 12}
+            x={points[10] - 16}
             y={points[11]}
             text={"TSP"}
             fontSize={16}

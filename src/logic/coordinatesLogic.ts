@@ -1,4 +1,14 @@
 export type FMSName = "DP" | "SM" | "IL" | "ASLR" | "RS" | "TSP";
+export type Side = "R" | "L" | null;
+export type FMSValue = 0 | 1 | 2 | 3;
+
+export function FMSValue(val: number) {
+  if (val in [0, 1, 2, 3]) {
+    return val as FMSValue;
+  } else {
+    throw Error("this is not FMSValue.");
+  }
+}
 type X = number;
 type Y = number;
 export type CenterPoint = [X, Y];
@@ -28,9 +38,9 @@ const RS_L_Y = RS_R_Y;
 
 export function calcCoordinates(
   name: FMSName,
-  side: "R" | "L" | null,
+  side: Side,
   centerPoint: CenterPoint,
-  ratio: 0 | 1 | 2 | 3
+  ratio: FMSValue
 ): Coordinates {
   switch (name) {
     case "DP":
