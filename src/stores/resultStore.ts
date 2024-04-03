@@ -67,7 +67,12 @@ const useResultStore = () => {
     }
     setValues({ ...values });
   };
-  return { value, setValue };
+
+  const allValues = (): Result => {
+    return { ...values };
+  };
+
+  return { value, setValue, allValues };
 };
 
 export const ResultStore = createContainer(useResultStore);

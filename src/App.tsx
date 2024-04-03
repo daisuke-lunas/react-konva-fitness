@@ -3,7 +3,7 @@ import "./App.css";
 import { indigo } from "@mui/material/colors";
 import ResultRow from "./components/resultRow";
 import bodyImgWoman from "./assets/人体図女性.png";
-import { Circle, Layer, Stage } from "react-konva";
+import { Layer, Stage } from "react-konva";
 import BackgroundHex from "./components/backGroundHex";
 import { ResultStore } from "./stores/resultStore";
 import ResultDiagram from "./components/resultDiagram";
@@ -36,9 +36,6 @@ const _app = () => {
         </Grid>
       </Box>
       <Box my={2}>
-        {
-          //ここに人体図と六角形
-        }
         <Container>
           <img src={bodyImgWoman} height={"300px"}></img>
         </Container>
@@ -55,11 +52,6 @@ const _app = () => {
         >
           <Stage width={stageWidth} height={stageHeight}>
             <Layer>
-              {
-                // 描きたい図形は、二等辺三角形を上下に2個、その間に長方形
-                // storeから必要な値を取得する
-              }
-              <Circle x={centerX} y={centerY} radius={10} stroke="red"></Circle>
               <BackgroundHex
                 centerPoint={[centerX, centerY]}
                 ratio={1}
@@ -73,7 +65,7 @@ const _app = () => {
                 ratio={3}
                 withName
               ></BackgroundHex>
-              <ResultDiagram />
+              <ResultDiagram centerPoint={[centerX, centerY]} />
             </Layer>
           </Stage>
         </Box>
