@@ -1,22 +1,42 @@
 import { Circle, Group, Line } from "react-konva";
 import { Result, ResultStore } from "../stores/resultStore";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   CenterPoint,
   Coordinates,
   calcCoordinates,
 } from "../logic/coordinatesLogic";
 import { lightBlue } from "@mui/material/colors";
+import Konva from "konva";
 
 interface _clProps {
+  centerPoint: CenterPoint;
   coord?: Coordinates;
   next?: Coordinates;
+  fixed: boolean;
 }
 
 const _circleAndLine = (props: _clProps) => {
+  const lineLef = useRef<Konva.Line>(null);
+
+  useEffect(() => {
+    if (
+      props.fixed &&
+      lineLef &&
+      lineLef.current &&
+      props.coord &&
+      props.next
+    ) {
+      lineLef.current.to({
+        points: [props.coord[0], props.coord[1], props.next[0], props.next[1]],
+        duration: 0.3,
+      });
+    }
+  }, [props.fixed, props.coord, props.next]);
+
   return (
     <>
-      {props.coord && (
+      {props.coord && props.fixed && (
         <Circle
           x={props.coord[0]}
           y={props.coord[1]}
@@ -26,15 +46,16 @@ const _circleAndLine = (props: _clProps) => {
       )}
       {props.coord && props.next && (
         <Line
+          ref={lineLef}
           stroke={lightBlue[300]}
           strokeWidth={2}
           points={[
-            props.coord[0],
-            props.coord[1],
-            props.next[0],
-            props.next[1],
+            props.centerPoint[0],
+            props.centerPoint[1],
+            props.centerPoint[0],
+            props.centerPoint[1],
           ]}
-        ></Line>
+        />
       )}
     </>
   );
@@ -42,6 +63,7 @@ const _circleAndLine = (props: _clProps) => {
 
 interface _props {
   centerPoint: CenterPoint;
+  fixed: boolean;
 }
 
 const ResultDiagram = (props: _props) => {
@@ -118,16 +140,61 @@ const ResultDiagram = (props: _props) => {
 
   return (
     <Group>
-      <_circleAndLine coord={DP_coord} next={SM_R_coord} />
-      <_circleAndLine coord={SM_R_coord} next={IL_R_coord} />
-      <_circleAndLine coord={IL_R_coord} next={ASLR_R_coord} />
-      <_circleAndLine coord={ASLR_R_coord} next={RS_R_coord} />
-      <_circleAndLine coord={RS_R_coord} next={TSP_coord} />
-      <_circleAndLine coord={TSP_coord} next={RS_L_coord} />
-      <_circleAndLine coord={RS_L_coord} next={ASLR_L_coord} />
-      <_circleAndLine coord={ASLR_L_coord} next={IL_L_coord} />
-      <_circleAndLine coord={IL_L_coord} next={SM_L_coord} />
-      <_circleAndLine coord={SM_L_coord} next={DP_coord} />
+      <_circleAndLine {...props} coord={DP_coord} next={SM_R_coord} />
+      <_circleAndLine
+        {...props}
+        coord={SM_R_coord}
+        next={IL_R_coord}
+        fixed={props.fixed}
+      />
+      <_circleAndLine
+        {...props}
+        coord={IL_R_coord}
+        next={ASLR_R_coord}
+        fixed={props.fixed}
+      />
+      <_circleAndLine
+        {...props}
+        coord={ASLR_R_coord}
+        next={RS_R_coord}
+        fixed={props.fixed}
+      />
+      <_circleAndLine
+        {...props}
+        coord={RS_R_coord}
+        next={TSP_coord}
+        fixed={props.fixed}
+      />
+      <_circleAndLine
+        {...props}
+        coord={TSP_coord}
+        next={RS_L_coord}
+        fixed={props.fixed}
+      />
+      <_circleAndLine
+        {...props}
+        coord={RS_L_coord}
+        next={ASLR_L_coord}
+        fixed={props.fixed}
+      />
+      <_circleAndLine
+        {...props}
+        coord={ASLR_L_coord}
+        next={IL_L_coord}
+        fixed={props.fixed}
+      />
+      <_circleAndLine
+        {...props}
+        coord={IL_L_coord}
+        next={SM_L_coord}
+        fixed={props.fixed}
+      />
+      <_circleAndLine
+        {...props}
+        coord={SM_L_coord}
+        next={DP_coord}
+        fixed={props.fixed}
+      />
     </Group>
   );
 };

@@ -48,6 +48,7 @@ const _app = () => {
                 size="small"
                 label={"お名前"}
                 onChange={(evt) => setPersonName(evt.target.value)}
+                autoComplete="off"
               />
             )}
             さん
@@ -61,6 +62,7 @@ const _app = () => {
                 label={"性別"}
                 onChange={(evt) => setSex(evt.target.value)}
                 sx={{ width: 100 }}
+                defaultValue={""}
               >
                 <MenuItem value={"女性"}>女性</MenuItem>
                 <MenuItem value={"男性"}>男性</MenuItem>
@@ -117,7 +119,7 @@ const _app = () => {
                 ratio={3}
                 withName
               ></BackgroundHex>
-              <ResultDiagram centerPoint={[centerX, centerY]} />
+              <ResultDiagram centerPoint={[centerX, centerY]} fixed={fixed} />
             </Layer>
           </Stage>
         </Box>
@@ -138,7 +140,13 @@ const _app = () => {
         </Grid>
       </Box>
       <Box mt={2}>
-        <TextField multiline fullWidth label="施術者からメッセージ" rows={3} />
+        <TextField
+          multiline
+          fullWidth
+          label="施術者からメッセージ"
+          rows={3}
+          autoComplete="off"
+        />
       </Box>
     </Container>
   );
