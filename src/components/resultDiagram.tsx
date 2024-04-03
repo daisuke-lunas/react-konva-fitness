@@ -1,4 +1,4 @@
-import { Circle, Group } from "react-konva";
+import { Circle, Group, Line } from "react-konva";
 import { Result, ResultStore } from "../stores/resultStore";
 import { useEffect, useState } from "react";
 import {
@@ -6,6 +6,39 @@ import {
   Coordinates,
   calcCoordinates,
 } from "../logic/coordinatesLogic";
+import { lightBlue } from "@mui/material/colors";
+
+interface _clProps {
+  coord?: Coordinates;
+  next?: Coordinates;
+}
+
+const _circleAndLine = (props: _clProps) => {
+  return (
+    <>
+      {props.coord && (
+        <Circle
+          x={props.coord[0]}
+          y={props.coord[1]}
+          radius={4}
+          stroke={lightBlue[700]}
+        />
+      )}
+      {props.coord && props.next && (
+        <Line
+          stroke={lightBlue[300]}
+          strokeWidth={2}
+          points={[
+            props.coord[0],
+            props.coord[1],
+            props.next[0],
+            props.next[1],
+          ]}
+        ></Line>
+      )}
+    </>
+  );
+};
 
 interface _props {
   centerPoint: CenterPoint;
@@ -85,50 +118,16 @@ const ResultDiagram = (props: _props) => {
 
   return (
     <Group>
-      {
-        // まずは各circle
-        // 続いて、Line
-      }
-      {DP_coord && (
-        <Circle x={DP_coord[0]} y={DP_coord[1]} radius={4} stroke="red" />
-      )}
-      {SM_L_coord && (
-        <Circle x={SM_L_coord[0]} y={SM_L_coord[1]} radius={4} stroke="red" />
-      )}
-      {SM_R_coord && (
-        <Circle x={SM_R_coord[0]} y={SM_R_coord[1]} radius={4} stroke="red" />
-      )}
-      {IL_L_coord && (
-        <Circle x={IL_L_coord[0]} y={IL_L_coord[1]} radius={4} stroke="red" />
-      )}
-      {IL_R_coord && (
-        <Circle x={IL_R_coord[0]} y={IL_R_coord[1]} radius={4} stroke="red" />
-      )}
-      {ASLR_L_coord && (
-        <Circle
-          x={ASLR_L_coord[0]}
-          y={ASLR_L_coord[1]}
-          radius={4}
-          stroke="red"
-        />
-      )}
-      {ASLR_R_coord && (
-        <Circle
-          x={ASLR_R_coord[0]}
-          y={ASLR_R_coord[1]}
-          radius={4}
-          stroke="red"
-        />
-      )}
-      {RS_L_coord && (
-        <Circle x={RS_L_coord[0]} y={RS_L_coord[1]} radius={4} stroke="red" />
-      )}
-      {RS_R_coord && (
-        <Circle x={RS_R_coord[0]} y={RS_R_coord[1]} radius={4} stroke="red" />
-      )}
-      {TSP_coord && (
-        <Circle x={TSP_coord[0]} y={TSP_coord[1]} radius={4} stroke="red" />
-      )}
+      <_circleAndLine coord={DP_coord} next={SM_R_coord} />
+      <_circleAndLine coord={SM_R_coord} next={IL_R_coord} />
+      <_circleAndLine coord={IL_R_coord} next={ASLR_R_coord} />
+      <_circleAndLine coord={ASLR_R_coord} next={RS_R_coord} />
+      <_circleAndLine coord={RS_R_coord} next={TSP_coord} />
+      <_circleAndLine coord={TSP_coord} next={RS_L_coord} />
+      <_circleAndLine coord={RS_L_coord} next={ASLR_L_coord} />
+      <_circleAndLine coord={ASLR_L_coord} next={IL_L_coord} />
+      <_circleAndLine coord={IL_L_coord} next={SM_L_coord} />
+      <_circleAndLine coord={SM_L_coord} next={DP_coord} />
     </Group>
   );
 };
