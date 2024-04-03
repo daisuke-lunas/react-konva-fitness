@@ -6,7 +6,7 @@ import bodyImgWoman from "./assets/人体図女性.png";
 import { Circle, Layer, Stage } from "react-konva";
 import BackgroundHex from "./components/backGroundHex";
 
-const WIDTH = 780;
+const WIDTH = 840;
 const IMG_HEIGHT = 300;
 
 const stageHeight = IMG_HEIGHT + 8;
@@ -78,15 +78,14 @@ function App() {
           container
           border={"grey solid 1px"}
           direction={"column"}
-          gap={1}
-          sx={{ padding: 1 }}
+          spacing={1}
         >
           <ResultRow name="DP"></ResultRow>
           <ResultRow name="SM" hasBodySide></ResultRow>
           <ResultRow name="IL" hasBodySide></ResultRow>
           <ResultRow name="ASLR" hasBodySide></ResultRow>
           <ResultRow name="RS" hasBodySide></ResultRow>
-          <ResultRow name="TSP"></ResultRow>
+          <ResultRow name="TSP" noBorder></ResultRow>
         </Grid>
       </Box>
       <Box>
