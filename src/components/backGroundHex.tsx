@@ -1,11 +1,6 @@
 import { grey } from "@mui/material/colors";
-import { Line } from "react-konva";
+import { Group, Line, Text } from "react-konva";
 import { CenterPoint, calcCoordinates } from "../logic/coordinatesLogic";
-
-interface _props {
-  centerPoint: CenterPoint;
-  ratio: 0 | 1 | 2 | 3;
-}
 
 function calcPoints(centerPoint: CenterPoint, ratio: 0 | 1 | 2 | 3) {
   const rslt: number[] = [];
@@ -24,15 +19,96 @@ function calcPoints(centerPoint: CenterPoint, ratio: 0 | 1 | 2 | 3) {
   );
 }
 
+interface _props {
+  centerPoint: CenterPoint;
+  ratio: 0 | 1 | 2 | 3;
+  withName?: boolean;
+}
+
 const BackgroundHex = (props: _props) => {
+  const points = calcPoints(props.centerPoint, props.ratio);
   return (
     <>
       <Line
         stroke={grey[400]}
         strokeWidth={2}
-        points={calcPoints(props.centerPoint, props.ratio)}
+        points={points}
         dash={[5, 5]}
       ></Line>
+      {props.withName && (
+        <Group>
+          <Text
+            x={points[0] - 8}
+            y={points[1] - 16}
+            text={"DP"}
+            fontSize={16}
+            fill={grey[400]}
+          />
+          <Text
+            x={points[2] + 4}
+            y={points[3]}
+            text={"SM-R"}
+            fontSize={16}
+            fill={grey[400]}
+          />
+          <Text
+            x={points[4] + 4}
+            y={points[5]}
+            text={"IL-R"}
+            fontSize={16}
+            fill={grey[400]}
+          />
+          <Text
+            x={points[6] + 4}
+            y={points[7]}
+            text={"ASLR-R"}
+            fontSize={16}
+            fill={grey[400]}
+          />
+          <Text
+            x={points[8] + 4}
+            y={points[9]}
+            text={"RS-R"}
+            fontSize={16}
+            fill={grey[400]}
+          />
+          <Text
+            x={points[10] - 12}
+            y={points[11]}
+            text={"TSP"}
+            fontSize={16}
+            fill={grey[400]}
+          />
+          <Text
+            x={points[12] - 40}
+            y={points[13]}
+            text={"RS-L"}
+            fontSize={16}
+            fill={grey[400]}
+          />
+          <Text
+            x={points[14] - 64}
+            y={points[15]}
+            text={"ASLR-L"}
+            fontSize={16}
+            fill={grey[400]}
+          />
+          <Text
+            x={points[16] - 36}
+            y={points[17]}
+            text={"IL-L"}
+            fontSize={16}
+            fill={grey[400]}
+          />
+          <Text
+            x={points[18] - 44}
+            y={points[19]}
+            text={"SM-L"}
+            fontSize={16}
+            fill={grey[400]}
+          />
+        </Group>
+      )}
     </>
   );
 };

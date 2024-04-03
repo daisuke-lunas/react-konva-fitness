@@ -9,7 +9,7 @@ import BackgroundHex from "./components/backGroundHex";
 const WIDTH = 840;
 const IMG_HEIGHT = 300;
 
-const stageHeight = IMG_HEIGHT + 8;
+const stageHeight = IMG_HEIGHT + 36;
 const stageWidth = WIDTH - 46;
 const centerX = stageWidth / 2;
 const centerY = stageHeight / 2;
@@ -33,7 +33,7 @@ function App() {
           </Grid>
         </Grid>
       </Box>
-      <Box my={1}>
+      <Box my={2}>
         {
           //ここに人体図と六角形
         }
@@ -68,12 +68,13 @@ function App() {
               <BackgroundHex
                 centerPoint={[centerX, centerY]}
                 ratio={3}
+                withName
               ></BackgroundHex>
             </Layer>
           </Stage>
         </Box>
       </Box>
-      <Box>
+      <Box sx={{ mt: 4, ml: 1 }}>
         <Grid
           container
           border={"grey solid 1px"}
