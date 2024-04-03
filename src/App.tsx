@@ -1,12 +1,21 @@
-import { Box, Container, Grid } from "@mui/material";
+import {
+  Box,
+  Button,
+  Container,
+  Grid,
+  MenuItem,
+  TextField,
+} from "@mui/material";
 import "./App.css";
 import { indigo } from "@mui/material/colors";
 import ResultRow from "./components/resultRow";
 import bodyImgWoman from "./assets/人体図女性.png";
+import bodyImgMan from "./assets/人体図男性.png";
 import { Layer, Stage } from "react-konva";
 import BackgroundHex from "./components/backGroundHex";
 import { ResultStore } from "./stores/resultStore";
 import ResultDiagram from "./components/resultDiagram";
+import { useState } from "react";
 
 const WIDTH = 840;
 const IMG_HEIGHT = 300;
@@ -17,6 +26,10 @@ const centerX = stageWidth / 2;
 const centerY = stageHeight / 2;
 
 const _app = () => {
+  const [fixed, setFixed] = useState<boolean>(false);
+  const [personName, setPersonName] = useState<string>("名無し");
+  const [sex, setSex] = useState<string>("");
+
   const stageTop =
     parseFloat(getComputedStyle(document.documentElement).fontSize) * 2 + 68;
 
@@ -28,8 +41,44 @@ const _app = () => {
           columnGap={2}
           sx={{ backgroundColor: indigo[100], padding: 2 }}
         >
-          <Grid item> 山田花 さん</Grid>
-          <Grid item> 性別: 女性</Grid>
+          <Grid item>
+            {fixed && <> {personName}</>}
+            {!fixed && (
+              <TextField
+                size="small"
+                label={"お名前"}
+                onChange={(evt) => setPersonName(evt.target.value)}
+              />
+            )}
+            さん
+          </Grid>
+          <Grid item>
+            {fixed && sex && <> 性別: {sex}</>}
+            {!fixed && (
+              <TextField
+                size="small"
+                select
+                label={"性別"}
+                onChange={(evt) => setSex(evt.target.value)}
+                sx={{ width: 100 }}
+              >
+                <MenuItem value={"女性"}>女性</MenuItem>
+                <MenuItem value={"男性"}>男性</MenuItem>
+                <MenuItem value={""}>（入力しない）</MenuItem>
+              </TextField>
+            )}
+          </Grid>
+          <Grid item sx={{ display: fixed ? "none" : undefined }}>
+            <Button
+              onClick={() => {
+                if (confirm("入力値を確定します。よろしいですか？")) {
+                  setFixed(true);
+                }
+              }}
+            >
+              確定する
+            </Button>
+          </Grid>
           <Grid item sx={{ marginLeft: "auto" }}>
             {new Date().toLocaleDateString(undefined, { dateStyle: "full" })}
           </Grid>
@@ -37,7 +86,10 @@ const _app = () => {
       </Box>
       <Box my={2}>
         <Container>
-          <img src={bodyImgWoman} height={"300px"}></img>
+          <img
+            src={sex === "男性" ? bodyImgMan : bodyImgWoman}
+            height={"300px"}
+          ></img>
         </Container>
         <Box
           id="konva-container"
@@ -77,18 +129,16 @@ const _app = () => {
           direction={"column"}
           spacing={1}
         >
-          <ResultRow name="DP"></ResultRow>
-          <ResultRow name="SM" hasBodySide></ResultRow>
-          <ResultRow name="IL" hasBodySide></ResultRow>
-          <ResultRow name="ASLR" hasBodySide></ResultRow>
-          <ResultRow name="RS" hasBodySide></ResultRow>
-          <ResultRow name="TSP" noBorder></ResultRow>
+          <ResultRow name="DP" fixed={fixed}></ResultRow>
+          <ResultRow name="SM" hasBodySide fixed={fixed}></ResultRow>
+          <ResultRow name="IL" hasBodySide fixed={fixed}></ResultRow>
+          <ResultRow name="ASLR" hasBodySide fixed={fixed}></ResultRow>
+          <ResultRow name="RS" hasBodySide fixed={fixed}></ResultRow>
+          <ResultRow name="TSP" noBorder fixed={fixed}></ResultRow>
         </Grid>
       </Box>
-      <Box>
-        {
-          // ひとこと欄
-        }
+      <Box mt={2}>
+        <TextField multiline fullWidth label="施術者からメッセージ" rows={3} />
       </Box>
     </Container>
   );

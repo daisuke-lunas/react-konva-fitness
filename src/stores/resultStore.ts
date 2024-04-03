@@ -18,7 +18,7 @@ const useResultStore = () => {
     switch (name) {
       case "DP":
       case "TSP":
-        if (typeof values[name] === "number") {
+        if (values[name] === undefined || typeof values[name] === "number") {
           return values[name];
         } else {
           throw Error("invalid value: " + name);

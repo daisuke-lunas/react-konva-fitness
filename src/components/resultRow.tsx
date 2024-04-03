@@ -1,4 +1,4 @@
-import { Box, Grid, MenuItem, TextField } from "@mui/material";
+import { Box, Grid, MenuItem, TextField, Typography } from "@mui/material";
 
 import { FMSName, FMSValue, Side } from "../logic/coordinatesLogic";
 import { lightGreen } from "@mui/material/colors";
@@ -18,6 +18,7 @@ interface _props {
   name: FMSName;
   hasBodySide?: boolean;
   noBorder?: boolean;
+  fixed: boolean;
 }
 
 const ResultRow = (props: _props) => {
@@ -59,58 +60,77 @@ const ResultRow = (props: _props) => {
           <Box width={240}>
             {props.hasBodySide ? (
               <Grid container alignItems={"center"} spacing={1}>
-                <Grid item width={120}>
-                  <TextField
-                    select
-                    fullWidth
-                    size="small"
-                    label="Left"
-                    onChange={(evt) => onChange(evt, "L")}
-                    defaultValue={0}
-                  >
-                    <MenuItem value={0}> </MenuItem>
-                    <MenuItem value={1}>1</MenuItem>
-                    <MenuItem value={2}>2</MenuItem>
-                    <MenuItem value={3}>3</MenuItem>
-                  </TextField>
-                  <TextField
-                    select
-                    fullWidth
-                    size="small"
-                    label="Right"
-                    sx={{ marginTop: 1 }}
-                    onChange={(evt) => onChange(evt, "R")}
-                    defaultValue={0}
-                  >
-                    <MenuItem value={0}> </MenuItem>
-                    <MenuItem value={1}>1</MenuItem>
-                    <MenuItem value={2}>2</MenuItem>
-                    <MenuItem value={3}>3</MenuItem>
-                  </TextField>
+                <Grid item width={props.fixed ? 120 : 80}>
+                  {!props.fixed && (
+                    <>
+                      <TextField
+                        select
+                        fullWidth
+                        size="small"
+                        label="Left"
+                        onChange={(evt) => onChange(evt, "L")}
+                        defaultValue={0}
+                      >
+                        <MenuItem value={0}> </MenuItem>
+                        <MenuItem value={1}>1</MenuItem>
+                        <MenuItem value={2}>2</MenuItem>
+                        <MenuItem value={3}>3</MenuItem>
+                      </TextField>
+                      <TextField
+                        select
+                        fullWidth
+                        size="small"
+                        label="Right"
+                        sx={{ marginTop: 1 }}
+                        onChange={(evt) => onChange(evt, "R")}
+                        defaultValue={0}
+                      >
+                        <MenuItem value={0}> </MenuItem>
+                        <MenuItem value={1}>1</MenuItem>
+                        <MenuItem value={2}>2</MenuItem>
+                        <MenuItem value={3}>3</MenuItem>
+                      </TextField>
+                    </>
+                  )}
+                  {props.fixed && (
+                    <>
+                      <Typography variant="body1">
+                        Left:{"  "}
+                        {resultStore.value(props.name, "L")}
+                      </Typography>
+                      <Typography variant="body1">
+                        Right: {resultStore.value(props.name, "R")}
+                      </Typography>
+                    </>
+                  )}
                 </Grid>
                 <Grid item width={100}>
-                  <TextField
-                    type={"number"}
-                    disabled
-                    label="avg."
-                    value={avg}
-                  />
+                  <Typography variant="body1">avg.: {avg}</Typography>
                 </Grid>
               </Grid>
             ) : (
-              <TextField
-                select
-                type={"number"}
-                fullWidth
-                size="small"
-                onChange={(evt) => onChange(evt, null)}
-                defaultValue={0}
-              >
-                <MenuItem value={0}></MenuItem>
-                <MenuItem value={1}>1</MenuItem>
-                <MenuItem value={2}>2</MenuItem>
-                <MenuItem value={3}>3</MenuItem>
-              </TextField>
+              <>
+                {!props.fixed && (
+                  <TextField
+                    select
+                    type={"number"}
+                    fullWidth
+                    size="small"
+                    onChange={(evt) => onChange(evt, null)}
+                    defaultValue={0}
+                  >
+                    <MenuItem value={0}></MenuItem>
+                    <MenuItem value={1}>1</MenuItem>
+                    <MenuItem value={2}>2</MenuItem>
+                    <MenuItem value={3}>3</MenuItem>
+                  </TextField>
+                )}
+                {props.fixed && (
+                  <Typography variant="body1">
+                    {resultStore.value(props.name, null)}
+                  </Typography>
+                )}
+              </>
             )}
           </Box>
         </Grid>
